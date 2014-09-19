@@ -18,24 +18,34 @@
     <body>
 
         <div class="container">
+            
+            <br />
+            <br />
 
-            <h1>Intelligent e-learning authoring.</h1>
-            <h2>Get started with Elucidat for free.</h2>
+            <img src="http://a37bb9891e3aae5ee723-8c137ed49bc45aafdd076b92d357cc53.r39.cf3.rackcdn.com/logo-170-dark.png" alt="Elucidat - Intelligent e-learning authoring" />
 
-            <form class="trial-signup form-inline" role="form">
-                <div class="form-group">
-                    <input type="text" placeholder="Name" name="full_name" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="text" placeholder="Email address" name="email" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="text" placeholder="Phone number" name="phone" class="form-control">
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-danger" data-loading-text="Please wait...">Sign up for a free trial</button>
-                </div>
-            </form>
+            <br />
+            <br />
+
+            <div class="jumbotron">
+                <h1>Intelligent e-learning authoring.</h1>
+                <h2>Get started with Elucidat for free.</h2>
+
+                <form class="trial-signup form-inline" role="form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Name" name="full_name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Email address" name="email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Phone number" name="phone" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-danger" data-loading-text="Please wait...">Sign up for a free trial</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <!-- thank you for trial signing up -->
@@ -60,7 +70,7 @@
         <script>
 
             var signup_url = '{{YOUR_RESELLER_URL}}';
-
+            
             $(document).ready(function () {
 
                 $('form.trial-signup').each(function () {
@@ -98,6 +108,7 @@
                             //
                             if (!$full_name.val().length)
                                 $full_name.parent().addClass('has-error');
+
                             // show error popover
                             $button.popover('show');
                             button_visible = true;
@@ -109,10 +120,8 @@
                         } else {
                             // form is ok
                             // remove error popover
-
                             if (button_visible)
                                 $button.popover('hide');
-                            
                             // and reset button
                             $button.button('loading');
                             // remove errors and reset form
@@ -145,7 +154,7 @@
                                     if(response.status == "errors") {
                                         // problems at this stage are always going to be todo with the email
                                         $email.parent().addClass('has-error');
-                                        // popover
+                                        // error popover
                                         $button.popover('show');
                                         button_visible = true;
                                         $button.next('.popover').click(function () {
