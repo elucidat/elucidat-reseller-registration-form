@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Example Reseller signup form for the Elucidat Elearning authoring tool</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+
+            <h1>Intelligent e-learning authoring.</h1>
+            <p>Get started with Elucidat for free</p>
+
+            <form class="trial-signup form-inline" role="form">
+                <div class="form-group">
+                    <input type="text" placeholder="Name" name="full_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Email address" name="email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Phone number" name="phone" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger" data-loading-text="Please wait...">Sign up for a free trial</button>
+                </div>
+            </form>
+        </div>
+
+
+        <!-- thank you for trial signing up -->
+        <div class="modal fade" role="dialog" aria-labelledby="trial_signup_title" id="trial_signup_modal" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title" id="trial_signup_title">Thank you</h2>
+              </div>
+              <div class="modal-body">Whoop!</div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+        <script>
+
+            var signup_url = '{{YOUR_RESELLER_URL}}';
+
+            $(document).ready(function () {
+
+                $('form.trial-signup').each(function () {
+
+                    // install error on button
+                    var $button = $(this).find('button');
+                    $button.popover({
+                                'content': '<span id="form_error">Sorry - that didn\'t quite go to plan - please make sure you have filled in all of the fields, and have included a valid email address.</span>',
+                                'trigger': 'manual',
+                                'placement': 'bottom',
+                                'html': true,
+                                'title': 'Bit of a problem...<button type="button" class="close" data-dismiss="modal">&times;</button>'
+                            });
+                    var button_visible = true;
+                    
+                    // on submit
+                    // check that the form has the right data, 
+                    $(this).submit(function (e) {
+                        // stop default
+                        e.preventDefault();
+                        // cache form reference
+                        var $form = $(this);
+                        // We should have Name, Email and Company
+                        var $phone = $form.find('input[name=phone]');
+                        var $email = $form.find('input[name=email]');
+                        var $full_name = $form.find('input[name=full_name]');
+                        // name needs to be split into first name and last name
+                        if (!$phone.val().length || !$email.val().length || !$full_name.val().length) {
+                            // errors - show to user
+                            if (!$phone.val().length)
+                                $phone.parent().addClass('has-error');
+                            //
+                            if (!$email.val().length)
+                                $email.parent().addClass('has-error');
+                            //
+                            if (!$full_name.val().length)
+                                $full_name.parent().addClass('has-error');
+                            // show error popover
+                            $button.popover('show');
+                            button_visible = true;
+                            $button.next('.popover').click(function () {
+                                $button.popover('hide');
+                                button_visible = false;
+                            });
+
+                        } else {
+                            // form is ok
+                            // remove error popover
+
+                            if (button_visible)
+                                $button.popover('hide');
+                            
+                            // and reset button
+                            $button.button('loading');
+                            // remove errors and reset form
+                            $phone.parent().removeClass('has-error');
+                            $email.parent().removeClass('has-error');
+                            $full_name.parent().removeClass('has-error');
+                            // split name
+                            var full_name_split = $full_name.val().split(' ');
+                            var first_name, last_name;
+                            if (full_name_split.length > 1) {
+                                first_name = full_name_split.slice(0, -1).join(' ');
+                                last_name = full_name_split.slice(-1).join(' ');
+                            } else {
+                                first_name = full_name_split[0];
+                                last_name = '';
+                            }
+                            // modal popup with spinner
+                            // then do ajax call to App
+                            $.ajax({
+                                type: "POST",
+                                url: signup_url,
+                                data: { 
+                                    "name": first_name, 
+                                    "surname": last_name, 
+                                    "telephone": $phone.val(), 
+                                    "email": $email.val(), 
+                                    "type": "ajax" 
+                                },
+                                success: function(response) {
+                                    if(response.status == "errors") {
+                                        // problems at this stage are always going to be todo with the email
+                                        $email.parent().addClass('has-error');
+                                        
+                                        $button.popover('show');
+                                        button_visible = true;
+                                        $button.next('.popover').click(function () {
+                                            $button.popover('hide');
+                                            button_visible = false;
+                                        });
+
+                                        // reset the form,
+                                        $button.button('reset');
+                                        
+                                    } else {
+                                        // reset the form,
+                                        $button.button('reset');
+                                        // put a thank you message in the modal
+                                        $('#trial_signup_modal').modal('show');
+                                        
+                                    }
+                                }
+                            });
+                        }
+                        // and make sure nothing else happens
+                        return false;
+                    });
+                });
+            });
+        </script>
+
+
+    </body>
+</html>
