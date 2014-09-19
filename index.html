@@ -20,7 +20,7 @@
         <div class="container">
 
             <h1>Intelligent e-learning authoring.</h1>
-            <p>Get started with Elucidat for free</p>
+            <h2>Get started with Elucidat for free.</h2>
 
             <form class="trial-signup form-inline" role="form">
                 <div class="form-group">
@@ -38,22 +38,21 @@
             </form>
         </div>
 
-
         <!-- thank you for trial signing up -->
         <div class="modal fade" role="dialog" aria-labelledby="trial_signup_title" id="trial_signup_modal" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="trial_signup_title">Thank you</h2>
-              </div>
-              <div class="modal-body">Whoop!</div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div><!-- /.modal-content -->
-          </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3 class="modal-title" id="trial_signup_title">Thank you</h3>
+                    </div>
+                    <div class="modal-body">Whoop!</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -146,14 +145,13 @@
                                     if(response.status == "errors") {
                                         // problems at this stage are always going to be todo with the email
                                         $email.parent().addClass('has-error');
-                                        
+                                        // popover
                                         $button.popover('show');
                                         button_visible = true;
                                         $button.next('.popover').click(function () {
                                             $button.popover('hide');
                                             button_visible = false;
                                         });
-
                                         // reset the form,
                                         $button.button('reset');
                                         
